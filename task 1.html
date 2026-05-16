@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Weather Dashboard</title>
+
+    <script src=
+    "https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:90%;
+            margin:auto;
+            padding:20px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .search-box{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        input{
+            padding:10px;
+            width:250px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:blue;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            margin-bottom:20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Weather Dashboard</h1>
+
+        <div class="search-box">
+
+            <input
+            type="text"
+            id="city"
+            placeholder="Enter City">
+
+            <button onclick="getWeather()">
+                Search
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h2 id="temp"></h2>
+
+            <h3 id="condition"></h3>
+
+        </div>
+
+        <div class="card">
+
+            <canvas id="weatherChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        async function getWeather(){
+
+            const city =
+            document.getElementById("city").value;
+
+            const apiKey =
+            "YOUR_API_KEY";
+
+            const url =
+            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            const response =
+            await fetch(url);
+
+            const data =
+            await response.json();
+
+            document.getElementById(
+                "temp"
+            ).innerHTML =
+            "Temperature : " +
+            data.main.temp + " °C";
+
+            document.getElementById(
+                "condition"
+            ).innerHTML =
+            "Condition : " +
+            data.weather[0].main;
+
+            createChart(data.main.temp);
+        }
+
+        function createChart(temp){
+
+            new Chart(
+                document.getElementById(
+                    "weatherChart"
+                ),
+                {
+                    type:"bar",
+
+                    data:{
+                        labels:["Temperature"],
+
+                        datasets:[{
+                            label:"Weather Data",
+
+                            data:[temp],
+
+                            backgroundColor:"blue"
+                        }]
+                    }
+                }
+            );
+        }
+
+    </script>
+
+</body>
+</html>
